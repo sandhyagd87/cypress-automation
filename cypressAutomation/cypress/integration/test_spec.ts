@@ -1,8 +1,15 @@
 
 
+context('Actions', () => {
+    beforeEach(() => {
+        cy.visit('http://www.amazon.com')
+        if(cy.contains("Don't Change"))
+        {
+            cy.xpath(".//div[@class='glow-toaster-footer']//input[@data-action-type='DISMISS']").click()
+        }
+    })
 
-// it('currency verification', () => {
-//     cy.visit('http://www.amazon.com')
+// it('Check the total displayed number of results for category Smart Home | Televisions', () => {
 //     cy.get("#nav-hamburger-menu").click()
 // //cy.get(".hmenu-visible > :nth-child(9) > .hmenu-item > .nav-sprite").click()
 //     cy.xpath('//a[@data-menu-id="7"]').click()
@@ -10,30 +17,39 @@
 // })  
 
 
-// it('Software products', () => {
-//     cy.visit('http://www.amazon.com')
-//     cy.contains("Today's Deals").click()
-//     cy.get(".a-expander-extend-header").click()
-//     cy.xpath('//span[contains(text(),"Software")]').click()
-//     cy.get(".summary > .a-text-bold").invoke('text').then((text) => {
-//         expect(text.trim()).equal('Software')
-//     })
-// })
-
-// it('currency verification', () => {
-//     cy.visit('http://www.amazon.com')
-//    cy.get(".icp-nav-link-inner > .nav-line-2").click()
-//    cy.get("#a-autoid-0-announce").click()
-//    cy.get("#icp-sc-dropdown_2").click()
-//    cy.get("#icp-btn-save").click()
-//    cy.get("#twotabsearchtextbox").type("television").type('{enter}')
-//    cy.get('.a-price-symbol').first().should('have.text', 'AED')    
-// })
-
-it('cart', () => {
-    cy.visit('http://www.amazon.com')
-    cy.get("#twotabsearchtextbox").type("Apple").type('{enter}')
-//    cy.get('.a-price-symbol').first().should('have.text', 'AED')    
-cy.get('[cel_widget_id="MAIN-SEARCH_RESULTS-1"]').click()
+it('Check filter by department in Deals and Promotions page', () => {
+    cy.contains("Today's Deals").click()
+    cy.get(".a-expander-extend-header").click()
+    cy.xpath('//span[contains(text(),"Software")]').click()
+    cy.get(".summary > .a-text-bold").invoke('text').then((text) => {
+        expect(text.trim()).equal('Software')
+    })
 })
 
+it('Check the selected currency displayed for the products', () => {
+   cy.get(".icp-nav-link-inner > .nav-line-2").click()
+   cy.get("#a-autoid-0-announce").click()
+   cy.get("#icp-sc-dropdown_2").click()
+   cy.get("#icp-btn-save").click()
+   cy.get("#twotabsearchtextbox").type("television").type('{enter}')
+   cy.get('.a-price-symbol').first().should('have.text', 'AED')    
+})
+
+it('Check Product Details Page', () => {
+    cy.get('#twotabsearchtextbox').click().get('#searchDropdownBox').select('Electronics',{force: true})  
+    cy.get('#twotabsearchtextbox').type("Apple").type('{enter}')
+    cy.get('.a-price-whole').first().click()
+    cy.get('.tabular-buybox-text').first().should('have.text','Amazon')
+
+    cy.xpath("//*[@id='availability']/span").invoke('text').then((text) => {
+                if (text.trim() === "In Stock.") {
+                    cy.get('#price_inside_buybox').invoke('text').as("cart").then((cart)=>{
+                        cy.get('#add-to-cart-button').click()
+                        cy.get(".huc-subtotal > .a-text-bold").first().should('have.text',cart.trim())
+                    }) 
+                }
+                else
+                {cy.log(`**ADD TO CART button not available**`) }
+            })
+            })
+        })
