@@ -1,0 +1,11 @@
+{
+    "testfile":[
+        "test_spec.ts"
+    ],
+    "reporter": "../node_modules/mochawesome/src/mochawesome.js",
+    "reporterOptions": {
+        "overwrite": false,
+        "html": false,
+        "json": true
+    }
+}
