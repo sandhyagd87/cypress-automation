@@ -1,5 +1,4 @@
 
-
 context('Actions', () => {
     beforeEach(() => {
         cy.visit('http://www.amazon.com')
@@ -9,33 +8,36 @@ context('Actions', () => {
         }
     })
 
-// it('Check the total displayed number of results for category Smart Home | Televisions', () => {
-//     cy.get("#nav-hamburger-menu").click()
-// //cy.get(".hmenu-visible > :nth-child(9) > .hmenu-item > .nav-sprite").click()
-//     cy.xpath('//a[@data-menu-id="7"]').click()
+  it('Check the total displayed number of results for category Smart Home | Televisions', () => {
+    cy.get("#nav-hamburger-menu").click()
+    cy.wait(2000)
+    cy.get('#hmenu-content > ul.hmenu.hmenu-visible > li:nth-child(9)').click()
+    cy.get(".hmenu-visible > :nth-child(11) > .hmenu-item").click({force: true})
+    cy.get('[alt="Smart Televisions"]').click({force: true})
+    cy.get('.a-span4').its('length').then((number) => {
+    cy.get(".a-box-inner > .a-color-base").should('contain', number)
+          })
+  })  
 
-// })  
-
-
-it('Check filter by department in Deals and Promotions page', () => {
+  it('Check filter by department in Deals and Promotions page', () => {
     cy.contains("Today's Deals").click()
     cy.get(".a-expander-extend-header").click()
     cy.xpath('//span[contains(text(),"Software")]').click()
     cy.get(".summary > .a-text-bold").invoke('text').then((text) => {
         expect(text.trim()).equal('Software')
     })
-})
+  })
 
-it('Check the selected currency displayed for the products', () => {
+  it('Check the selected currency displayed for the products', () => {
    cy.get(".icp-nav-link-inner > .nav-line-2").click()
    cy.get("#a-autoid-0-announce").click()
    cy.get("#icp-sc-dropdown_2").click()
    cy.get("#icp-btn-save").click()
    cy.get("#twotabsearchtextbox").type("television").type('{enter}')
    cy.get('.a-price-symbol').first().should('have.text', 'AED')    
-})
+  })
 
-it('Check Product Details Page', () => {
+  it('Check Product Details Page', () => {
     cy.get('#twotabsearchtextbox').click().get('#searchDropdownBox').select('Electronics',{force: true})  
     cy.get('#twotabsearchtextbox').type("Apple").type('{enter}')
     cy.get('.a-price-whole').first().click()
@@ -51,5 +53,5 @@ it('Check Product Details Page', () => {
                 else
                 {cy.log(`**ADD TO CART button not available**`) }
             })
-            })
-        })
+  })
+})
